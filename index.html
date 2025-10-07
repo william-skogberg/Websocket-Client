@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="sv">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>WS Pastebin – Klient</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+<header>
+  <div class="left">
+    <strong>WS Pastebin</strong>
+    <span id="status" class="badge">disconnected</span>
+  </div>
+  <div class="right">
+    <input id="apiKey" placeholder="access token (api_key)" />
+    <button id="save" class="primary">Spara</button>
+    <button id="reconnect">Reconnect</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="row">
+    <textarea id="text" placeholder="Klistra/skriv text här…"></textarea>
+  </div>
+  <div class="row">
+    <button id="send" class="primary">Skicka</button>
+    <button id="clear">Rensa</button>
+    <button id="copy">Kopiera till urklipp</button>
+    <button id="paste">Klistra in från urklipp</button>
+  </div>
+
+  <h4>Logg</h4>
+  <div id="log" class="log"></div>
+</main>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="./app.js" defer></script>
+</body>
+</html>
