@@ -1,5 +1,5 @@
 const SERVER_URL  = 'https://websocket-uxhx.onrender.com';        // ws server
-const REFRESH_URL = 'https://virtualboard-438y.onrender.com/api/auth/refresh';         // virtualboard api
+const REFRESH_URL = 'https://virtualboard-438y.onrender.com/refresh';         // virtualboard api
 
 const STORAGE_ACCESS = 'api_key';          // access token 
 const STORAGE_REFRESH = 'refresh_token';   // refresh token 
