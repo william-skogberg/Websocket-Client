@@ -7,41 +7,59 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <main>
-    <h2>WS Pastebin <small id="status">disconnected</small></h2>
+  <main class="container">
+    <header class="header">
+      <h1>WS Pastebin <span id="status" class="status status--disconnected">disconnected</span></h1>
+    </header>
 
-    <!-- Login för att hämta nya tokens från Auth -->
-    <section id="loginBox" style="margin-bottom:1rem;">
+    <!-- Login (hämta nya tokens) -->
+    <section class="card">
       <h3>Login (hämta nya tokens)</h3>
-      <input id="loginUser" placeholder="Användarnamn" />
-      <input id="loginPass" type="password" placeholder="Lösenord" />
-      <button id="loginBtn">Hämta tokens</button>
-      <div id="loginMsg"></div>
+      <div class="grid grid-3">
+        <input id="loginUser" class="input" placeholder="Användarnamn" />
+        <input id="loginPass" class="input" type="password" placeholder="Lösenord" />
+        <button id="loginBtn" class="btn btn-primary">Hämta tokens</button>
+      </div>
+      <div id="loginMsg" class="muted"></div>
     </section>
 
     <!-- Tokenhantering + WS-kontroller -->
-    <section>
-      <input id="apiKey" placeholder="api_key (access token)" style="width:70%" />
-      <button id="save">Spara</button>
-      <button id="reconnect">Reconnect</button>
-      <button id="logout">Logout</button>
-    </section>
-
-    <section style="margin-top:1rem;">
-      <textarea id="text" placeholder="Klistra/skriv text här…" rows="8" style="width:100%"></textarea>
-      <div style="margin-top:.5rem;">
-        <button id="send">Skicka</button>
-        <button id="clear">Rensa</button>
-        <button id="copy">Kopiera till urklipp</button>
-        <button id="paste">Klistra in från urklipp</button>
+    <section class="card">
+      <div class="grid grid-3 align-center">
+        <div class="input-group">
+          <label for="apiKey">api_key (access token)</label>
+          <div class="input-with-actions">
+            <input id="apiKey" class="input" type="password" placeholder="••••••••••••" />
+            <button id="toggleApi" class="icon-btn" title="Visa/Dölj">👁️</button>
+            <button id="copyApi" class="icon-btn" title="Kopiera">📋</button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button id="save" class="btn">Spara</button>
+          <button id="reconnect" class="btn">Reconnect</button>
+          <button id="logout" class="btn btn-danger">Logout</button>
+        </div>
       </div>
     </section>
 
-    <h3>Logg</h3>
-    <div id="log" style="height:160px;overflow:auto;border:1px solid #333;padding:.5rem;border-radius:8px;"></div>
+    <!-- Textområde -->
+    <section class="card">
+      <textarea id="text" class="textarea" placeholder="Klistra/skriv text här…" rows="8"></textarea>
+      <div class="btn-row">
+        <button id="send" class="btn btn-primary">Skicka</button>
+        <button id="clear" class="btn">Rensa</button>
+        <button id="copy" class="btn">Kopiera till urklipp</button>
+        <button id="paste" class="btn">Klistra in från urklipp</button>
+      </div>
+    </section>
+
+    <!-- Logg -->
+    <section class="card">
+      <h3>Logg</h3>
+      <div id="log" class="log"></div>
+    </section>
   </main>
 
-  <!-- Socket.IO client -->
   <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
   <script src="./app.js"></script>
 </body>

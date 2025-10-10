@@ -1,9 +1,9 @@
 const AUTH_BASE   = "https://virtualboard-438y.onrender.com";     
-const SERVER_URL  = "https://websocket-uxhx.onrender.com";       
+const SERVER_URL  = "https://websocket-uxhx.onrender.com";        
 const REFRESH_URL = AUTH_BASE + "/refresh";
 
-// storage nycklar
-const STORAGE_ACCESS  = "api_key";       
+// storage keys
+const STORAGE_ACCESS  = "api_key";        
 const STORAGE_REFRESH = "refresh_token";  
 
 // element
@@ -12,7 +12,7 @@ const statusEl = $("#status");
 const apiKeyIn = $("#apiKey");
 const saveBtn = $("#save");
 const reconnectBtn = $("#reconnect");
-const logoutBtn = $("#logout");          
+const logoutBtn = $("#logout");
 const textEl = $("#text");
 const sendBtn = $("#send");
 const clearBtn = $("#clear");
@@ -23,6 +23,8 @@ const loginUser = $("#loginUser");
 const loginPass = $("#loginPass");
 const loginBtn  = $("#loginBtn");
 const loginMsg  = $("#loginMsg");
+const toggleApi = $("#toggleApi");  
+const copyApi   = $("#copyApi");    
 
 // hjälpfunktioner
 function append(s) {
@@ -31,20 +33,41 @@ function append(s) {
   logEl.appendChild(div);
   logEl.scrollTop = logEl.scrollHeight;
 }
-function setStatus(s) { statusEl.textContent = s; }
+function setStatus(s){
+  statusEl.textContent = s;
+  statusEl.classList.toggle('status--connected', s === 'connected');
+  statusEl.classList.toggle('status--disconnected', s !== 'connected');
+}
 function getAccess()  { return localStorage.getItem(STORAGE_ACCESS)  || ""; }
 function getRefresh() { return localStorage.getItem(STORAGE_REFRESH) || ""; }
 function setAccess(t) { localStorage.setItem(STORAGE_ACCESS, t); apiKeyIn.value = t; }
 function setRefresh(t){ localStorage.setItem(STORAGE_REFRESH, t || ""); }
 
-//initsialisera
+// init
 (function load() {
   apiKeyIn.value = getAccess();
 })();
 
 saveBtn.onclick = () => { setAccess(apiKeyIn.value.trim()); append("api_key sparad"); };
 
-//login mot auth
+// visa dölj api_key
+toggleApi.onclick = () => {
+  const isPw = apiKeyIn.type === 'password';
+  apiKeyIn.type = isPw ? 'text' : 'password';
+  toggleApi.textContent = isPw ? '🙈' : '👁️';
+};
+
+// Kopiera api_key
+copyApi.onclick = async () => {
+  try {
+    await navigator.clipboard.writeText(apiKeyIn.value);
+    append('api_key kopierad');
+  } catch {
+    append('kopiera kräver säker kontext (https eller localhost).');
+  }
+};
+
+// login mot auth
 loginBtn.onclick = async () => {
   loginMsg.textContent = "Loggar in…";
   try {
@@ -68,7 +91,7 @@ loginBtn.onclick = async () => {
   }
 };
 
-// refresh access token
+//refresh access token
 async function ensureRefreshToken() {
   let rt = getRefresh();
   if (!rt) {
@@ -104,7 +127,7 @@ async function refreshAccessToken() {
   return newAccess;
 }
 
-// logout
+//logout
 async function logout() {
   const rt = getRefresh();
   try {
@@ -114,9 +137,8 @@ async function logout() {
         headers: { Authorization: `Bearer ${rt}` }
       });
     }
-  } catch (_) {
-  
-  }
+  } catch(_) { /* ignorera nätverksfel */ }
+
   localStorage.removeItem(STORAGE_ACCESS);
   localStorage.removeItem(STORAGE_REFRESH);
   apiKeyIn.value = "";
@@ -126,7 +148,7 @@ async function logout() {
 }
 logoutBtn && (logoutBtn.onclick = logout);
 
-// socket io
+// socket.io-klient
 let socket;
 function connect() {
   if (socket) { try { socket.disconnect(); } catch{} socket = null; }
@@ -175,13 +197,13 @@ function connect() {
   socket.on("paste",  (msg) => {
     const line = `[${new Date(msg.ts).toLocaleTimeString()}] ${msg.from ?? "okänd"}: ${msg.text}`;
     append("📥 " + line);
-    textEl.value = msg.text;
+    textEl.value = msg.text; 
   });
 }
 
 reconnectBtn.onclick = connect;
 
-// Skicka,rensa clipboard
+// Skicka, rensa clipboard
 sendBtn.onclick = () => {
   if (!socket || !socket.connected) return append("❗ ej ansluten");
   socket.emit("paste", { text: textEl.value });
