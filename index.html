@@ -2,39 +2,47 @@
 <html lang="sv">
 <head>
   <meta charset="utf-8" />
+  <title>WS Pastebin</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>WS Pastebin – Klient</title>
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-<header>
-  <div class="left">
-    <strong>WS Pastebin</strong>
-    <span id="status" class="badge">disconnected</span>
-  </div>
-  <div class="right">
-    <input id="apiKey" placeholder="access token (api_key)" />
-    <button id="save" class="primary">Spara</button>
-    <button id="reconnect">Reconnect</button>
-  </div>
-</header>
+  <main>
+    <h2>WS Pastebin <small id="status">disconnected</small></h2>
 
-<main class="wrap">
-  <div class="row">
-    <textarea id="text" placeholder="Klistra/skriv text här…"></textarea>
-  </div>
-  <div class="row">
-    <button id="send" class="primary">Skicka</button>
-    <button id="clear">Rensa</button>
-    <button id="copy">Kopiera till urklipp</button>
-    <button id="paste">Klistra in från urklipp</button>
-  </div>
+    <!-- Login för att hämta nya tokens från Auth -->
+    <section id="loginBox" style="margin-bottom:1rem;">
+      <h3>Login (hämta nya tokens)</h3>
+      <input id="loginUser" placeholder="Användarnamn" />
+      <input id="loginPass" type="password" placeholder="Lösenord" />
+      <button id="loginBtn">Hämta tokens</button>
+      <div id="loginMsg"></div>
+    </section>
 
-  <h4>Logg</h4>
-  <div id="log" class="log"></div>
-</main>
+    <!-- Tokenhantering + WS-kontroller -->
+    <section>
+      <input id="apiKey" placeholder="api_key (access token)" style="width:70%" />
+      <button id="save">Spara</button>
+      <button id="reconnect">Reconnect</button>
+      <button id="logout">Logout</button>
+    </section>
 
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<script src="./app.js" defer></script>
+    <section style="margin-top:1rem;">
+      <textarea id="text" placeholder="Klistra/skriv text här…" rows="8" style="width:100%"></textarea>
+      <div style="margin-top:.5rem;">
+        <button id="send">Skicka</button>
+        <button id="clear">Rensa</button>
+        <button id="copy">Kopiera till urklipp</button>
+        <button id="paste">Klistra in från urklipp</button>
+      </div>
+    </section>
+
+    <h3>Logg</h3>
+    <div id="log" style="height:160px;overflow:auto;border:1px solid #333;padding:.5rem;border-radius:8px;"></div>
+  </main>
+
+  <!-- Socket.IO client -->
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>
